@@ -27,12 +27,23 @@ $request_method = $_SERVER['REQUEST_METHOD'];
 
 switch ($request_method) {
 	case 'GET':
-		#echo "No parameter received.";
-		// Consulta SQL para seleccionar todos los registros de la tabla "blogs"
-		$sql = "SELECT id, cve_municipio, desc_municipio, id_indicador, indicador, ano, valor, unidad_medida FROM zacatecas;";
-		// Ejecutar la consulta
-		$result = $conexion->query($sql);
+	
 
+		if (isset($_GET['average'])) {
+			$sql = "SELECT AVG(valor) FROM zacatecas WHERE unidad_medida = 'Defunciones registradas';";
+		}elseif (isset($_GET['repeted'])){
+			$sql = "SELECT indicador, COUNT(*) AS repeted_values FROM zacatecas GROUP BY 1; ";
+		}elseif (isset($_GET['media'])){
+		#SELECT AVG(valor) AS mediana_valor FROM ( SELECT valor, @rownum:=@rownum+1 as `row_number`, @total_rows:=@rownum FROM (SELECT valor FROM zacatecas ORDER BY valor) as tu_tabla_ordenada, (SELECT @rownum:=0) r ) as ordered WHERE `row_number` IN (FLOOR((@total_rows+1)/2), FLOOR((@total_rows+2)/2)); 
+			$sql = "SELECT AVG(valor) AS median_valor FROM ( SELECT valor, @rownum := @rownum + 1 AS row_number, @total_rows := @rownum FROM zacatecas JOIN (SELECT @rownum := 0) r ORDER BY valor ) AS ordered WHERE row_number IN (FLOOR((@total_rows + 1) / 2), FLOOR((@total_rows + 2) / 2)); ";
+		}else{
+			#echo "No parameter received.";
+			// Consulta SQL para seleccionar todos los registros de la tabla "blogs"
+			$sql = "SELECT id, cve_municipio, desc_municipio, id_indicador, indicador, ano, valor, unidad_medida FROM zacatecas;";
+			// Ejecutar la consulta
+		}
+		$result = $conexion->query($sql);
+		
 		// Comprobar si la consulta tuvo resultados
 		if ($result) {
 			if ($result->num_rows > 0) {
@@ -57,6 +68,7 @@ switch ($request_method) {
 			echo "Error en la consulta: " . $conexion->error;
 		}
 		$conexion->close();
+		
 		break;
 
 

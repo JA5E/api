@@ -95,7 +95,7 @@
           .catch(error => console.error('Error:', error));
     </script>
     <script>
-      fetch('method.php?media=1')
+      fetch('method.php?median=1')
       .then(response => response.json())
       .then(data => {
 

@@ -66,7 +66,7 @@
         .catch(error => console.error('Error:', error));
     </script>
     <script>
-      fetch('method.php?average=1')
+      fetch('average.php')
       .then(response => response.json())
       .then(data => {
 
@@ -78,7 +78,7 @@
       .catch(error => console.error('Error:', error));
     </script>
     <script>
-        fetch('method.php?repeted=1')
+        fetch('repeated.php')
           .then(response => response.json())
           .then(data => {
             const countBody = document.getElementById('countT');
@@ -95,7 +95,7 @@
           .catch(error => console.error('Error:', error));
     </script>
     <script>
-      fetch('method.php?median=1')
+      fetch('median.php')
       .then(response => response.json())
       .then(data => {
 
